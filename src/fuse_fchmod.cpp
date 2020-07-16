@@ -14,16 +14,29 @@
   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+#include "config.hpp"
 #include "errno.hpp"
 #include "fileinfo.hpp"
 #include "fs_base_fchmod.hpp"
 
 #include <fuse.h>
 
+#include <string.h>
 #include <sys/stat.h>
 
 namespace l
 {
+  static
+  bool
+  is_git(const char   *fusepath_,
+         const mode_t  mode_)
+  {
+    if((mode_ & 0777) != 0444)
+      return false;
+
+    return (strstr(fusepath_,"/.git/") != NULL);
+  }
+
   static
   int
   fchmod(const int    fd_,
@@ -45,8 +58,14 @@ namespace FUSE
   fchmod(const struct fuse_file_info *ffi_,
          const mode_t                 mode_)
   {
-    FileInfo *fi = reinterpret_cast<FileInfo*>(ffi_->fh);
+    mode_t mode;
+    const Config &config = Config::ro();
+    FileInfo     *fi     = reinterpret_cast<FileInfo*>(ffi_->fh);
 
-    return l::fchmod(fi->fd,mode_);
+    mode = mode_;
+    if((config.git_nfs_hack == true) && l::is_git(fi->fusepath.c_str(),mode_))
+      mode |= (S_IWUSR|S_IWGRP);
+
+    return l::fchmod(fi->fd,mode);
   }
 }

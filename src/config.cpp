@@ -82,6 +82,7 @@ Config::Config()
   fsname(),
   func(),
   fuse_msg_size(FUSE_MAX_MAX_PAGES),
+  git_nfs_hack(false),
   ignorepponrename(false),
   inodecalc("hybrid-hash"),
   link_cow(false),
@@ -142,6 +143,7 @@ Config::Config()
   _map["func.unlink"]          = &func.unlink;
   _map["func.utimens"]         = &func.utimens;
   _map["fuse_msg_size"]        = &fuse_msg_size;
+  _map["git_nfs_hack"]         = &git_nfs_hack;
   _map["ignorepponrename"]     = &ignorepponrename;
   _map["inodecalc"]            = &inodecalc;
   _map["kernel_cache"]         = &kernel_cache;

@@ -104,6 +104,7 @@ public:
   ConfigSTR      fsname;
   Funcs          func;
   ConfigUINT64   fuse_msg_size;
+  ConfigBOOL     git_nfs_hack;
   ConfigBOOL     ignorepponrename;
   InodeCalc      inodecalc;
   ConfigBOOL     kernel_cache;

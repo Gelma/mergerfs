@@ -21,16 +21,29 @@
 #include "rv.hpp"
 #include "ugid.hpp"
 
-#include <fuse.h>
+#include "fuse.h"
 
 #include <string>
 #include <vector>
+
+#include <string.h>
 
 using std::string;
 using std::vector;
 
 namespace l
 {
+  static
+  bool
+  is_git(const char   *fusepath_,
+         const mode_t  mode_)
+  {
+    if((mode_ & 0777) != 0444)
+      return false;
+
+    return (strstr(fusepath_,"/.git/") != NULL);
+  }
+
   static
   int
   chmod_loop_core(const string &basepath_,
@@ -39,6 +52,7 @@ namespace l
                   const int     error_)
   {
     int rv;
+    mode_t mode;
     string fullpath;
 
     fullpath = fs::path::make(basepath_,fusepath_);
@@ -93,6 +107,9 @@ namespace FUSE
     const fuse_context *fc     = fuse_get_context();
     const Config       &config = Config::ro();
     const ugid::Set     ugid(fc->uid,fc->gid);
+
+    if((config.git_nfs_hack == true) && l::is_git(fusepath_,mode_))
+      mode_ |= (S_IWUSR|S_IWGRP);
 
     return l::chmod(config.func.chmod.policy,
                     config.branches,
