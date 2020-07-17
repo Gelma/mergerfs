@@ -297,6 +297,9 @@ If all branches are filtered an error will be returned. Typically **EROFS** (rea
 | lfs (least free space) | Search category: same as **eplfs**. Action category: same as **eplfs**. Create category: Pick the drive with the least available free space. |
 | lus (least used space) | Search category: same as **eplus**. Action category: same as **eplus**. Create category: Pick the drive with the least used space. |
 | mfs (most free space) | Search category: same as **epmfs**. Action category: same as **epmfs**. Create category: Pick the drive with the most available free space. |
+| msplfs (most shared path, least free space) | Like **eplfs** but will walk back the path if it fails to find a branch at that level. |
+| msplus (most shared path, least used space) | Like **eplus** but will walk back the path if it fails to find a branch at that level. |
+| mspmfs (most shared path, most free space) | Like **epmfs** but will walk back the path if it fails to find a branch at that level. |
 | newest | Pick the file / directory with the largest mtime. |
 | rand (random) | Calls **all** and then randomizes. Returns 1. |
 

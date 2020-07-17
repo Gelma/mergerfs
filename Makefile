@@ -193,7 +193,7 @@ tarball: man changelog version
 
 debian-changelog:
 ifeq ($(GIT_REPO),1)
-	$(GIT2DEBCL) --name mergerfs > debian/changelog
+	$(GIT2DEBCL) --name mergerfs | tee debian/changelog
 else
 	cp ChangeLog debian/changelog
 endif
